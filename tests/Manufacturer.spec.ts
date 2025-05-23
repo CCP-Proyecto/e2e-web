@@ -1,16 +1,19 @@
 import { test, expect } from '@playwright/test';
+import { createUser } from './utils';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:3000/login');
-  await page.getByRole('textbox', { name: 'Email' }).fill('camiloaromero23@gmail.com');
-  await page.getByRole('textbox', { name: 'Contraseña' }).click();
-  await page.getByRole('textbox', { name: 'Contraseña' }).fill('Tempo123');
-  await page.getByRole('button', { name: 'Iniciar sesión' }).click();
+    await createUser(page)
+    await page.goto('http://localhost:3000/login');
+    await page.getByRole('textbox', { name: 'Email' }).fill('camiloaromero23@gmail.com');
+    await page.getByRole('textbox', { name: 'Contraseña' }).click();
+    await page.getByRole('textbox', { name: 'Contraseña' }).fill('Tempo123');
+    await page.getByRole('button', { name: 'Iniciar sesión' }).click();
+    await page.waitForLoadState('networkidle');
 });
 
 test.describe('Create Manufacturer', async () => {
     test('test', async ({ page }) => {
-        await page.getByText('CCPCOMPRAS FÁCILES, ENVÍOS RÁPIDOSEspañolBienvenido¡Bienvenido al módulo de').press('ControlOrMeta+r');
+        await page.goto('http://localhost:3000');
         await page.getByRole('link', { name: 'CUENTAS/FABRICANTES Gestione' }).click();
         await page.getByRole('textbox', { name: 'Nombre cuenta' }).click();
         await page.getByRole('textbox', { name: 'Nombre cuenta' }).fill('Fabricante1');
@@ -35,8 +38,8 @@ test.describe('Create Manufacturer', async () => {
 
         await page.getByRole('button', { name: 'Registrar' }).click();
         await page.getByRole('listitem').click();
-        
+
         await expect(page.url()).toBe('http://localhost:3000/manufacturers');
 
-      });
+    });
 });
